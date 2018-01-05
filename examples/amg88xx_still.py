@@ -29,14 +29,14 @@ from PIL import Image, ImageDraw
 
 # parse command line arguments
 parser = argparse.ArgumentParser(description='Take a still image.')
-parser.add_argument('-o','--output', metavar='filename', default='amg88xx_still.jpg', help='specify output filename')
-parser.add_argument('-s','--scale', type=int, default=2, help='specify image scale')
+parser.add_argument('-o', '--output', metavar='filename', default='amg88xx_still.jpg', help='specify output filename')
+parser.add_argument('-s', '--scale', type=int, default=2, help='specify image scale')
 parser.add_argument('--min', type=float, help='specify minimum temperature')
 parser.add_argument('--max', type=float, help='specify maximum temperature')
 parser.add_argument('--report', action='store_true', default=False, help='show sensor information without saving image')
 
 args = parser.parse_args()
-    
+
 # sensor setup
 NX = 8
 NY = 8
@@ -45,7 +45,7 @@ sensor = Adafruit_AMG88xx()
 # wait for it to boot
 sleep(.1)
 
-# get sensor readings  
+# get sensor readings
 pixels = sensor.readPixels()
 
 if args.report:
@@ -63,22 +63,24 @@ COLORDEPTH = 256
 colors = list(Color("indigo").range_to(Color("red"), COLORDEPTH))
 colors = [(int(c.red * 255), int(c.green * 255), int(c.blue * 255)) for c in colors]
 
-#some utility functions
+# some utility functions
 def constrain(val, min_val, max_val):
     return min(max_val, max(min_val, val))
+
 
 def map(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
+
 # map sensor readings to color map
-MINTEMP = min(pixels) if args.min == None else args.min
-MAXTEMP = max(pixels) if args.max == None else args.max
+MINTEMP = min(pixels) if not args.min else args.min
+MAXTEMP = max(pixels) if not args.max else args.max
 pixels = [map(p, MINTEMP, MAXTEMP, 0, COLORDEPTH - 1) for p in pixels]
 
 # create the image
 for ix in xrange(NX):
     for iy in xrange(NY):
-        draw.point([(ix,iy%NX)], fill=colors[constrain(int(pixels[ix+NX*iy]), 0, COLORDEPTH- 1)])
+        draw.point([(ix, iy % NX)], fill=colors[constrain(int(pixels[ix + NX * iy]), 0, COLORDEPTH - 1)])
 
 # scale and save
-image.resize((NX*args.scale, NY*args.scale), Image.BICUBIC).save(args.output)
+image.resize((NX * args.scale, NY * args.scale), Image.BICUBIC).save(args.output)

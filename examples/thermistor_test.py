@@ -22,7 +22,7 @@
 
 # Can enable debug output by uncommenting:
 #import logging
-#logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 from Adafruit_AMG88xx import Adafruit_AMG88xx
 

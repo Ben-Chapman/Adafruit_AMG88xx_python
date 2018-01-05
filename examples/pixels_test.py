@@ -22,7 +22,7 @@
 
 # Can enable debug output by uncommenting:
 #import logging
-#logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 from Adafruit_AMG88xx import Adafruit_AMG88xx
 from time import sleep
@@ -42,10 +42,9 @@ sensor = Adafruit_AMG88xx()
 # Optionally you can override the bus number:
 #sensor = AMG88.Adafruit_AMG88xx(busnum=2)
 
-#wait for it to boot
+# wait for it to boot
 sleep(.1)
 
 while(1):
-	print(sensor.readPixels())
-	sleep(1)
-	
+    print(sensor.readPixels())
+    sleep(1)
